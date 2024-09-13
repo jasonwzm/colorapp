@@ -13,6 +13,7 @@ spec:
       labels:
         app: colorteller
         version: blue
+        group: control
     spec:
       nodeSelector:
         statsig.com/nodeType: spot
@@ -24,6 +25,14 @@ spec:
         env:
         - name: SERVER_PORT
           value: "8080"
+        - name: GROUP
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['group']
+        - name: COLOR
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['version']
         resources:
           requests:
             cpu: 100m
@@ -72,6 +81,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['version']
+        - name: GROUP
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['group']
         - name: SERVER_PORT
           value: "8080"
         resources:

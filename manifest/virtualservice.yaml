@@ -13,10 +13,10 @@ spec:
         subset: stable
         port:
           number: 8080
-      weight: 80
+      weight: 20
     - destination:
         host: colorteller
         subset: canary
         port:
           number: 8080
-      weight: 20
+      weight: 80
