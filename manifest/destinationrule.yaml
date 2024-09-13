@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: colorteller
+  namespace: default
+spec:
+  host: colorteller
+  subsets:
+  - name: stable
+    labels:
+      app: colorteller
+      version: blue
+  - name: canary
+    labels:
+      app: colorteller
+      version: green
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN

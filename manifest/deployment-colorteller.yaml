@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colorteller
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colorteller
+  template:
+    metadata:
+      labels:
+        app: colorteller
+        version: blue
+    spec:
+      nodeSelector:
+        statsig.com/nodeType: spot
+      containers:
+      - name: colorteller
+        image: gcr.io/statsig-services/demo-colorteller:blue
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SERVER_PORT
+          value: "8080"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colorteller-green
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: colorteller
+  template:
+    metadata:
+      labels:
+        app: colorteller
+        version: green
+    spec:
+      nodeSelector:
+        statsig.com/nodeType: spot
+      containers:
+      - name: colorteller
+        image: gcr.io/statsig-services/demo-colorteller:blue
+        ports:
+        - containerPort: 8080
+        env:
+        - name: COLOR
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['version']
+        - name: SERVER_PORT
+          value: "8080"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20

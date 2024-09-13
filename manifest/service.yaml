@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: colorteller
+  namespace: default
+spec:
+  selector:
+    app: colorteller
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
