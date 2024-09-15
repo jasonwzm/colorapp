@@ -19,12 +19,14 @@ spec:
         statsig.com/nodeType: spot
       containers:
       - name: colorteller
-        image: gcr.io/statsig-services/demo-colorteller:blue
+        image: gcr.io/statsig-services/demo-colorteller:latest
         ports:
         - containerPort: 8080
         env:
         - name: SERVER_PORT
           value: "8080"
+        - name: STATSIG_SERVER_SDK_KEY
+          value: "redacted"
         - name: GROUP
           valueFrom:
             fieldRef:
@@ -68,12 +70,13 @@ spec:
       labels:
         app: colorteller
         version: green
+        group: test
     spec:
       nodeSelector:
         statsig.com/nodeType: spot
       containers:
       - name: colorteller
-        image: gcr.io/statsig-services/demo-colorteller:blue
+        image: gcr.io/statsig-services/demo-colorteller:latest
         ports:
         - containerPort: 8080
         env:
@@ -87,6 +90,8 @@ spec:
               fieldPath: metadata.labels['group']
         - name: SERVER_PORT
           value: "8080"
+        - name: STATSIG_SERVER_SDK_KEY
+          value: "redacted"
         resources:
           requests:
             cpu: 100m
