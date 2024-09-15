@@ -13,6 +13,16 @@ import (
 const defaultPort = "8080"
 const defaultColor = "green"
 const defaultGroup = "control"
+const defaultExperiment = "colorapp"
+
+func getExperiment() string {
+	experiment := os.Getenv("EXPERIMENT")
+	if experiment != "" {
+		return experiment
+	}
+
+	return defaultExperiment
+}
 
 func getStatsigServerSDKKey() string {
 	key := os.Getenv("STATSIG_SERVER_SDK_KEY")
@@ -63,7 +73,7 @@ func (h *colorHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 			fmt.Sprintf("%x", rand.Uint32()),
 			fmt.Sprintf("%x", rand.Uint32()),
 		)
-		exposureData := fmt.Sprintf(`{"exposures": [{"user": {"customIDs": {"requestID": "%s"}}, "experimentName": "colorapp", "group": "%s"}]}`, uid, getGroup())
+		exposureData := fmt.Sprintf(`{"exposures": [{"user": {"customIDs": {"requestID": "%s"}}, "experimentName": "%s", "group": "%s"}]}`, uid, getExperiment(), getGroup())
 		req, err := http.NewRequest("POST", "https://events.statsigapi.net/v1/log_custom_exposure", strings.NewReader(exposureData))
 		if err != nil {
 			log.Printf("Error creating request: %v", err)

@@ -20,13 +20,16 @@ spec:
       containers:
       - name: colorteller
         image: gcr.io/statsig-services/demo-colorteller:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
         - name: SERVER_PORT
           value: "8080"
         - name: STATSIG_SERVER_SDK_KEY
-          value: "redacted"
+          value: "secret-g0JoYZRxKmo03eeQCJFGBGbEZ7ebU7D5CIFdJAlgsI8"
+        - name: EXPERIMENT
+          value: "colorapp"
         - name: GROUP
           valueFrom:
             fieldRef:
@@ -77,6 +80,7 @@ spec:
       containers:
       - name: colorteller
         image: gcr.io/statsig-services/demo-colorteller:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -91,7 +95,9 @@ spec:
         - name: SERVER_PORT
           value: "8080"
         - name: STATSIG_SERVER_SDK_KEY
-          value: "redacted"
+          value: "secret-g0JoYZRxKmo03eeQCJFGBGbEZ7ebU7D5CIFdJAlgsI8"
+        - name: EXPERIMENT
+          value: "colorapp"
         resources:
           requests:
             cpu: 100m
